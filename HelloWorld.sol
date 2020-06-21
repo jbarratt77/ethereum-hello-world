@@ -17,7 +17,60 @@ contract HelloWorld{
     //string arrays
     //string[] public messages = ["hello", "hellow world", "hello again"];
     
+    //struct - collection of variables like an object
+    struct Person {
+        //uint id;
+        string name;
+        uint age;
+        uint height;
+        //address walletAddress;
+        bool senior;
+    }
+    //create array of the Person structs
+    //Person[] public people;
+    
+    //create mapping of the Person structs
+    mapping(address => Person) private people;
+    
     //FUNCTIONS
+    //public function
+    function createPerson(string memory name, uint age, uint height) public {
+        //create local instance of a Person
+        Person memory newPerson;
+        //update properties on the newPerson from arguments
+        //newPerson.id = people.length;
+        newPerson.name = name;
+        newPerson.age = age;
+        newPerson.height = height;
+        //create instance of a Person and add it to the people array
+        //people.push(newPerson);
+        
+        if(age >= 65) {
+            newPerson.senior = true;
+        }
+        else{
+            newPerson.senior = false;
+        }
+        insertPerson(newPerson);
+    }
+    //private functon
+    function insertPerson(Person memory newPerson) private {
+        //Add Person to the mapping
+        people[msg.sender] = newPerson;
+    }
+    
+    //getter
+    //get Person from mapping
+    function getPerson() public view returns(string memory name, uint age, uint height, bool senior) {
+        return(
+            people[msg.sender].name,
+            people[msg.sender].age,
+            people[msg.sender].height,
+            people[msg.sender].senior
+        );
+        
+    }
+    
     //getter
     //the view keyword changes the behaviour of the function and means it can't modify the state
     function getMessage() public view returns(string memory){
